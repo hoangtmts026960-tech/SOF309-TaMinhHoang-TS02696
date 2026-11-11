@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOTO STORE - Showroom Mô Tô Cao Cấp</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            red: '#e53e3e',
+                            darkred: '#9b2c2c',
+                            gold: '#d69e2e',
+                            dark: '#1a202c',
+                            card: '#2d3748'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-header {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col">
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="fixed top-20 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-40 w-full glass-header bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" onclick="showPage('home-page')" class="flex items-center gap-2 text-xl font-extrabold tracking-wider text-red-600 dark:text-red-500">
+                <i class="fa-solid font-black fa-motorcycle text-2xl"></i>
+                <span>MOTO<span class="text-gray-800 dark:text-white">STORE</span></span>
+            </a>
+
+            <!-- Nav Links -->
+            <nav class="hidden md:flex items-center gap-6 font-medium text-sm">
+                <button onclick="showPage('home-page')" class="hover:text-red-600 transition">Trang Chủ</button>
+                <button onclick="showPage('catalog-page')" class="hover:text-red-600 transition">Danh Mục Xe</button>
+                <button onclick="showPage('wishlist-page')" class="hover:text-red-600 transition flex items-center gap-1">
+                    <i class="fa-solid fa-heart text-red-500"></i> Yêu Thích
+                </button>
+                <button onclick="showPage('game-page')" class="hover:text-red-600 transition flex items-center gap-1">
+                    <span>🍎</span> Game Săn Mã
+                </button>
+            </nav>
+
+            <!-- Actions Right -->
+            <div class="flex items-center gap-3">
+                <!-- Dark Mode Toggle -->
+                <button id="theme-toggle" onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition" title="Đổi Chế Độ">
+                    <i id="theme-icon" class="fa-solid fa-moon text-gray-600 dark:text-yellow-400"></i>
+                </button>
+
+                <!-- Wishlist Button Mobile/Header -->
+                <button onclick="showPage('wishlist-page')" class="relative p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition" title="Danh sách yêu thích">
+                    <i class="fa-solid fa-heart text-red-500"></i>
+                    <span id="wishlist-badge" class="absolute -top-1.5 -right-1.5 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                </button>
+
+                <!-- Cart Button -->
+                <button onclick="showPage('cart-page')" class="relative p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition" title="Giỏ hàng">
+                    <i class="fa-solid fa-cart-shopping text-gray-700 dark:text-gray-200"></i>
+                    <span id="cart-badge" class="absolute -top-1.5 -right-1.5 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                </button>
+
+                <!-- Auth Buttons / User Profile -->
+                <div id="auth-section">
+                    <!-- Dynamic rendering by JS -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINERS -->
+    <main class="flex-grow">
+        
+        <!-- ================= PAGE 1: HOME PAGE ================= -->
+        <section id="home-page" class="page-content">
+            <!-- Hero Banner Slider -->
+            <div class="relative w-full h-[480px] md:h-[550px] overflow-hidden bg-black">
+                <div id="hero-slider" class="w-full h-full relative">
+                    <div id="slide-img" class="w-full h-full bg-cover bg-center transition-all duration-700 flex items-center" style="background-image: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1600&q=80');">
+                        <div class="max-w-7xl mx-auto px-6 w-full text-white">
+                            <span class="inline-block px-3 py-1 bg-red-600 text-xs font-bold rounded-full mb-3 uppercase tracking-wider">Siêu Môtô Nhập Khẩu</span>
+                            <h1 id="slide-title" class="text-3xl sm:text-5xl font-black mb-4 uppercase leading-tight">BMW S1000RR 2024</h1>
+                            <p id="slide-subtitle" class="text-gray-300 max-w-lg mb-6 text-sm sm:text-base">Mẫu Superbike thống trị mọi đường đua với công nghệ ShiftCam đỉnh cao.</p>
+                            <div class="flex gap-4">
+                                <button onclick="showPage('catalog-page')" class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-lg transition">Khám Phá Ngay</button>
+                                <button onclick="openDetail(1)" class="px-6 py-3 bg-white/20 hover:bg-white/30 backdrop-blur text-white font-bold rounded-lg transition">Xem Chi Tiết</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Countdown Big Sale Section -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-10">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-gray-700 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div>
+                        <span class="text-red-600 dark:text-red-400 font-bold text-sm tracking-wider uppercase"><i class="fa-solid fa-bolt mr-1"></i> Ưu Đãi Đặc Biệt</span>
+                        <h2 class="text-2xl font-black">MEGA SALE MÙA HÈ - GIẢM ĐẾN 15%</h2>
+                    </div>
+                    <div class="flex items-center gap-3 text-center">
+                        <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-xl min-w-[65px]">
+                            <span id="cd-days" class="block text-2xl font-black text-red-600 dark:text-red-400">02</span>
+                            <span class="text-[10px] uppercase text-gray-500 dark:text-gray-400 font-bold">Ngày</span>
+                        </div>
+                        <span class="text-xl font-bold">:</span>
+                        <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-xl min-w-[65px]">
+                            <span id="cd-hours" class="block text-2xl font-black text-red-600 dark:text-red-400">14</span>
+                            <span class="text-[10px] uppercase text-gray-500 dark:text-gray-400 font-bold">Giờ</span>
+                        </div>
+                        <span class="text-xl font-bold">:</span>
+                        <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-xl min-w-[65px]">
+                            <span id="cd-mins" class="block text-2xl font-black text-red-600 dark:text-red-400">35</span>
+                            <span class="text-[10px] uppercase text-gray-500 dark:text-gray-400 font-bold">Phút</span>
+                        </div>
+                        <span class="text-xl font-bold">:</span>
+                        <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-xl min-w-[65px]">
+                            <span id="cd-secs" class="block text-2xl font-black text-red-600 dark:text-red-400">50</span>
+                            <span class="text-[10px] uppercase text-gray-500 dark:text-gray-400 font-bold">Giây</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Products -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="flex justify-between items-end mb-8">
+                    <div>
+                        <h2 class="text-3xl font-extrabold">Sản Phẩm Nổi Bật</h2>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Những mẫu siêu xe mô tô hot nhất vừa cập bến showroom</p>
+                    </div>
+                    <button onclick="showPage('catalog-page')" class="text-red-600 font-bold hover:underline flex items-center gap-1 text-sm">
+                        Xem Tất Cả <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+                <div id="home-featured-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 2: CATALOG PAGE ================= -->
+        <section id="catalog-page" class="page-content hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <h1 class="text-3xl font-extrabold mb-6">Danh Mục Xe Mô Tô</h1>
+
+            <!-- Filter Controls -->
+            <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Tìm kiếm</label>
+                    <div class="relative">
+                        <input id="filter-search" oninput="applyFilters()" type="text" placeholder="Tên xe..." class="w-full pl-9 pr-3 py-2 bg-gray-50 dark:bg-gray-700 rounded-lg text-sm border-none focus:ring-2 focus:ring-red-500 outline-none">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Dòng xe</label>
+                    <select id="filter-category" onchange="applyFilters()" class="w-full p-2 bg-gray-50 dark:bg-gray-700 rounded-lg text-sm border-none focus:ring-2 focus:ring-red-500 outline-none">
+                        <option value="">Tất cả dòng xe</option>
+                        <option value="Sportbike">Sportbike</option>
+                        <option value="Nakedbike">Nakedbike</option>
+                        <option value="Adventure">Adventure</option>
+                        <option value="Classic">Classic</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Thương hiệu</label>
+                    <select id="filter-brand" onchange="applyFilters()" class="w-full p-2 bg-gray-50 dark:bg-gray-700 rounded-lg text-sm border-none focus:ring-2 focus:ring-red-500 outline-none">
+                        <option value="">Tất cả hãng</option>
+                        <option value="BMW">BMW</option>
+                        <option value="Kawasaki">Kawasaki</option>
+                        <option value="Ducati">Ducati</option>
+                        <option value="Yamaha">Yamaha</option>
+                        <option value="Honda">Honda</option>
+                        <option value="Aprilia">Aprilia</option>
+                        <option value="KTM">KTM</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Sắp xếp giá</label>
+                    <select id="filter-sort" onchange="applyFilters()" class="w-full p-2 bg-gray-50 dark:bg-gray-700 rounded-lg text-sm border-none focus:ring-2 focus:ring-red-500 outline-none">
+                        <option value="default">Mặc định</option>
+                        <option value="asc">Giá: Thấp đến Cao</option>
+                        <option value="desc">Giá: Cao đến Thấp</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div id="catalog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Injected by JS -->
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 3: DETAIL PAGE ================= -->
+        <section id="detail-page" class="page-content hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <button onclick="showPage('catalog-page')" class="mb-6 flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-red-600 transition">
+                <i class="fa-solid fa-arrow-left"></i> Quay lại danh mục
+            </button>
+            <div id="detail-content" class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                <!-- Injected by JS -->
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE: WISHLIST PAGE ================= -->
+        <section id="wishlist-page" class="page-content hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex items-center justify-between mb-6">
+                <h1 class="text-3xl font-extrabold flex items-center gap-3">
+                    <i class="fa-solid fa-heart text-red-500"></i> Xe Yêu Thích Của Bạn
+                </h1>
+                <button onclick="clearWishlist()" id="clear-wishlist-btn" class="text-sm font-bold text-gray-400 hover:text-red-600 transition hidden">
+                    <i class="fa-solid fa-trash-can mr-1"></i> Xóa tất cả
+                </button>
+            </div>
+
+            <div id="wishlist-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Injected by JS -->
+            </div>
+            
+            <div id="wishlist-empty-msg" class="hidden text-center py-16 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700">
+                <i class="fa-regular fa-heart text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
+                <p class="text-lg font-bold text-gray-500">Danh sách yêu thích đang trống!</p>
+                <p class="text-xs text-gray-400 mt-1 mb-4">Hãy thả tim vào những mẫu xe bạn ưng ý nhất để xem lại sau.</p>
+                <button onclick="showPage('catalog-page')" class="px-6 py-2.5 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition">Khám Phá Xe Ngay</button>
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 4: CART PAGE ================= -->
+        <section id="cart-page" class="page-content hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <h1 class="text-3xl font-extrabold mb-6 flex items-center gap-3">
+                <i class="fa-solid fa-cart-shopping text-red-600"></i> Giỏ Hàng Của Bạn
+            </h1>
+
+            <div id="cart-layout" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Cart Items List (Left Side) -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div id="cart-items-container" class="space-y-4">
+                        <!-- Dynamic items -->
+                    </div>
+                    <div id="cart-empty-msg" class="hidden text-center py-12 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700">
+                        <i class="fa-solid fa-cart-flatbed text-6xl text-gray-300 mb-4"></i>
+                        <p class="text-lg font-bold text-gray-500">Giỏ hàng của bạn đang trống!</p>
+                        <button onclick="showPage('catalog-page')" class="mt-4 px-6 py-2.5 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition">Mua Sắm Ngay</button>
+                    </div>
+                </div>
+
+                <!-- Order Summary & Checkout (Right Side) -->
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-md border border-gray-100 dark:border-gray-700 h-fit space-y-6">
+                    <h2 class="text-xl font-bold border-b border-gray-100 dark:border-gray-700 pb-3">Tóm Tắt Đơn Hàng</h2>
+                    
+                    <!-- Coupon Code -->
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Mã Giảm Giá</label>
+                        <div class="flex gap-2">
+                            <input id="coupon-input" type="text" placeholder="Nhập MOTO10" class="flex-grow p-2.5 bg-gray-50 dark:bg-gray-700 rounded-lg text-sm border-none uppercase font-semibold outline-none focus:ring-2 focus:ring-red-500">
+                            <button onclick="applyCoupon()" class="px-4 py-2.5 bg-gray-900 dark:bg-gray-600 text-white text-sm font-bold rounded-lg hover:bg-black transition">Áp Dụng</button>
+                        </div>
+                        <p id="coupon-msg" class="text-xs mt-1 font-semibold"></p>
+                    </div>
+
+                    <!-- Price Calculations -->
+                    <div class="space-y-3 text-sm border-t border-gray-100 dark:border-gray-700 pt-4">
+                        <div class="flex justify-between text-gray-500">
+                            <span>Tạm tính</span>
+                            <span id="summary-subtotal" class="font-bold text-gray-800 dark:text-gray-200">0 VNĐ</span>
+                        </div>
+                        <div class="flex justify-between text-green-600 dark:text-green-400">
+                            <span>Giảm giá</span>
+                            <span id="summary-discount" class="font-bold">-0 VNĐ</span>
+                        </div>
+                        <div class="flex justify-between text-lg font-extrabold border-t border-gray-100 dark:border-gray-700 pt-3">
+                            <span>Tổng Thanh Toán</span>
+                            <span id="summary-total" class="text-red-600 dark:text-red-500">0 VNĐ</span>
+                        </div>
+                    </div>
+
+                    <!-- Checkout Actions -->
+                    <div class="space-y-3 pt-2">
+                        <button onclick="openCheckoutModal()" class="w-full py-3.5 bg-red-600 hover:bg-red-700 text-white font-extrabold rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-qrcode"></i> Đặt Hàng & Thanh Toán QR
+                        </button>
+                        <button onclick="clearCart()" class="w-full py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 font-bold rounded-xl hover:bg-gray-200 transition text-sm">
+                            <i class="fa-solid fa-trash-can mr-1"></i> Xóa Tất Cả Giỏ Hàng
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 5: GAME PAGE ================= -->
+        <section id="game-page" class="page-content hidden max-w-4xl mx-auto px-4 py-8">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-xl border border-gray-100 dark:border-gray-700 text-center">
+                <span class="px-3 py-1 bg-yellow-100 text-yellow-800 font-bold text-xs rounded-full">Mini Game Trúng Quà</span>
+                <h1 class="text-3xl font-extrabold mt-2 mb-2">🍎 Hái Táo Tránh Bom 💣</h1>
+                <p class="text-gray-500 dark:text-gray-400 text-sm mb-6">Mỗi 1 giây vật phẩm sẽ xuất hiện ngẫu nhiên. Nhấp Táo 🍎 (+10đ), né Bom 💣 (-20đ). Đạt <strong>100 điểm</strong> nhận ngay voucher <strong>MOTO10</strong>!</p>
+
+                <!-- Game Dashboard -->
+                <div class="flex justify-center items-center gap-8 mb-6 bg-gray-50 dark:bg-gray-700 p-4 rounded-xl">
+                    <div>
+                        <span class="text-xs text-gray-400 block font-semibold uppercase tracking-wider">Điểm Số</span>
+                        <span id="game-score" class="text-4xl font-black text-red-600 dark:text-red-400">0</span>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-400 block font-semibold uppercase tracking-wider">Trạng Thái</span>
+                        <span id="game-status-text" class="text-sm font-bold text-green-600 dark:text-green-400">Đang chạy (1s/lần)</span>
+                    </div>
+                </div>
+
+                <!-- Game Grid 3x3 -->
+                <div id="game-grid" class="grid grid-cols-3 gap-4 max-w-xs mx-auto mb-6">
+                    <!-- 9 Cards injected dynamically -->
+                </div>
+
+                <div class="flex justify-center gap-4">
+                    <button id="btn-start-game" onclick="toggleGameLoop()" class="px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow transition flex items-center gap-2">
+                        <i class="fa-solid fa-pause"></i> Tạm Dừng
+                    </button>
+                    <button onclick="resetGameScore()" class="px-6 py-2.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-bold rounded-lg transition">
+                        <i class="fa-solid fa-rotate-right mr-1"></i> Chơi Lại
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 6: AUTH PAGE ================= -->
+        <section id="auth-page" class="page-content hidden max-w-md mx-auto px-4 py-12">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-100 dark:border-gray-700">
+                <div class="flex border-b border-gray-200 dark:border-gray-700 mb-6">
+                    <button id="tab-login" onclick="switchAuthTab('login')" class="flex-1 pb-3 font-bold border-b-2 border-red-600 text-red-600">Đăng Nhập</button>
+                    <button id="tab-register" onclick="switchAuthTab('register')" class="flex-1 pb-3 font-bold border-b-2 border-transparent text-gray-400 hover:text-gray-600">Đăng Ký</button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-1">Email hoặc SĐT</label>
+                        <input type="text" id="login-user" required class="w-full p-3 bg-gray-50 dark:bg-gray-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-red-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-1">Mật khẩu</label>
+                        <input type="password" id="login-pass" required class="w-full p-3 bg-gray-50 dark:bg-gray-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-red-500">
+                    </div>
+                    <button type="submit" class="w-full py-3 bg-red-600 text-white font-bold rounded-lg shadow hover:bg-red-700 transition">Đăng Nhập</button>
+                </form>
+
+                <!-- Register Form -->
+                <form id="form-register" onsubmit="handleRegister(event)" class="space-y-4 hidden">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-1">Họ và Tên</label>
+                        <input type="text" id="reg-name" required class="w-full p-3 bg-gray-50 dark:bg-gray-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-red-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-1">Email</label>
+                        <input type="email" id="reg-email" required class="w-full p-3 bg-gray-50 dark:bg-gray-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-red-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-1">Số điện thoại</label>
+                        <input type="tel" id="reg-phone" required class="w-full p-3 bg-gray-50 dark:bg-gray-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-red-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-1">Mật khẩu</label>
+                        <input type="password" id="reg-pass" required class="w-full p-3 bg-gray-50 dark:bg-gray-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-red-500">
+                    </div>
+                    <button type="submit" class="w-full py-3 bg-red-600 text-white font-bold rounded-lg shadow hover:bg-red-700 transition">Tạo Tài Khoản</button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-gray-400 py-10 border-t border-gray-800 text-sm mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <span class="text-xl font-extrabold text-red-500 block mb-3">MOTO STORE</span>
+                <p class="text-xs text-gray-500">Hệ thống phân phối xe mô tô phân khối lớn chính hãng hàng đầu Việt Nam.</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-3">Showroom</h4>
+                <p class="text-xs">📍 123 Đường Nguyễn Văn Linh, Q.7, TP.HCM</p>
+                <p class="text-xs mt-1">📞 Hotline: 1900 8888</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-3">Cam Kết Quality</h4>
+                <p class="text-xs">✓ 170 Hạng mục kiểm định</p>
+                <p class="text-xs mt-1">✓ Bảo hành 3 năm / 30.000km</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-3">Kết Nối</h4>
+                <div class="flex gap-3 text-lg">
+                    <a href="#" class="hover:text-red-500"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#" class="hover:text-red-500"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#" class="hover:text-red-500"><i class="fa-brands fa-tiktok"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- BACK TO TOP BUTTON -->
+    <button id="back-to-top" onclick="scrollToTop()" class="fixed bottom-6 right-6 z-40 p-3 bg-red-600 text-white rounded-full shadow-2xl hidden hover:bg-red-700 transition">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- MODAL THANH TOÁN VIETQR -->
+    <div id="checkout-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative border border-gray-100 dark:border-gray-700">
+            <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h3 class="text-xl font-extrabold text-center mb-1">Thanh Toán VietQR</h3>
+            <p class="text-xs text-center text-gray-500 mb-4">Mở ứng dụng Ngân hàng để quét mã QR bên dưới</p>
+
+            <!-- QR Display -->
+            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-xl flex flex-col items-center mb-4">
+                <img id="vietqr-image" src="" alt="Mã QR VietQR" class="w-56 h-56 object-contain rounded-lg shadow-sm">
+                
+                <div class="mt-3 text-center">
+                    <span class="text-xs text-gray-400 block font-semibold">Thời gian giữ đơn</span>
+                    <span id="qr-timer" class="text-lg font-black text-red-600 dark:text-red-400">15:00</span>
+                </div>
+            </div>
+
+            <!-- Transfer Info -->
+            <div class="space-y-2 text-xs border-t border-gray-100 dark:border-gray-700 pt-3 mb-6">
+                <div class="flex justify-between">
+                    <span class="text-gray-500">Ngân hàng:</span>
+                    <span class="font-bold">VietinBank (NH TMCP Công Thương)</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-500">Số tài khoản:</span>
+                    <span class="font-bold text-red-600 dark:text-red-400">10288889999</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-500">Chủ tài khoản:</span>
+                    <span class="font-bold">SHOWROOM MOTO STORE VIETNAM</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-500">Số tiền:</span>
+                    <span id="qr-amount" class="font-bold text-sm text-green-600 dark:text-green-400">0 VNĐ</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-500">Nội dung CK:</span>
+                    <span id="qr-memo" class="font-bold uppercase text-gray-800 dark:text-gray-200">MOTO1234</span>
+                </div>
+            </div>
+
+            <!-- Modal Action -->
+            <button onclick="confirmPaymentSuccess()" class="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-circle-check"></i> Đã Chuyển Khoản Thành Công
+            </button>
+        </div>
+    </div>
+
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // ================= DATA STATE =================
+        const PRODUCTS = [
+            { id: 1, name: 'BMW S1000RR 2024', brand: 'BMW', category: 'Sportbike', price: 949000000, odo: '0 km', cc: '999 cc', year: 2024, gearbox: '6 cấp', image: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=800&q=80' },
+            { id: 2, name: 'Kawasaki Ninja ZX-10R', brand: 'Kawasaki', category: 'Sportbike', price: 729000000, odo: '1,200 km', cc: '998 cc', year: 2023, gearbox: '6 cấp', image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=800&q=80' },
+            { id: 3, name: 'Ducati Streetfighter V4', brand: 'Ducati', category: 'Nakedbike', price: 850000000, odo: '500 km', cc: '1103 cc', year: 2024, gearbox: '6 cấp', image: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=800&q=80' },
+            { id: 4, name: 'Yamaha YZF-R1M', brand: 'Yamaha', category: 'Sportbike', price: 820000000, odo: '0 km', cc: '998 cc', year: 2024, gearbox: '6 cấp', image: 'https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&w=800&q=80' },
+            { id: 5, name: 'Honda CBR1000RR-R SP', brand: 'Honda', category: 'Sportbike', price: 1050000000, odo: '0 km', cc: '1000 cc', year: 2024, gearbox: '6 cấp', image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=800&q=80' },
+            { id: 6, name: 'BMW R1250 GS Adventure', brand: 'BMW', category: 'Adventure', price: 704000000, odo: '3,500 km', cc: '1254 cc', year: 2023, gearbox: '6 cấp', image: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=800&q=80' },
+            { id: 7, name: 'Aprilia RSV4 Factory', brand: 'Aprilia', category: 'Sportbike', price: 885000000, odo: '0 km', cc: '1099 cc', year: 2024, gearbox: '6 cấp', image: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=800&q=80' },
+            { id: 8, name: 'KTM 1290 Super Duke R', brand: 'KTM', category: 'Nakedbike', price: 750000000, odo: '2,000 km', cc: '1301 cc', year: 2023, gearbox: '6 cấp', image: 'https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&w=800&q=80' }
+        ];
+
+        let cart = JSON.parse(localStorage.getItem('moto_cart')) || [];
+        let wishlist = JSON.parse(localStorage.getItem('moto_wishlist')) || [];
+        let discountPercent = 0; // 0% or 10%
+        let currentUser = JSON.parse(localStorage.getItem('moto_user')) || null;
+        let qrTimerInterval = null;
+
+        // ================= INITIALIZATION =================
+        window.onload = function() {
+            renderAuthSection();
+            updateCartBadge();
+            updateWishlistBadge();
+            renderHomeProducts();
+            renderCatalogProducts(PRODUCTS);
+            initGame();
+            startCountdown();
+
+            // Dark Mode Init
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('theme-icon').className = 'fa-solid fa-sun text-yellow-400';
+            }
+        };
+
+        // Scroll listener for back to top
+        window.onscroll = function() {
+            const btn = document.getElementById('back-to-top');
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                btn.classList.remove('hidden');
+            } else {
+                btn.classList.add('hidden');
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ================= PAGE ROUTING =================
+        function showPage(pageId) {
+            document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(pageId);
+            if (target) target.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (pageId === 'cart-page') {
+                renderCart();
+            } else if (pageId === 'wishlist-page') {
+                renderWishlist();
+            }
+        }
+
+        // ================= WISHLIST SYSTEM =================
+        function toggleWishlist(productId, event) {
+            if (event) event.stopPropagation();
+
+            const index = wishlist.indexOf(productId);
+            const product = PRODUCTS.find(p => p.id === productId);
+
+            if (index > -1) {
+                wishlist.splice(index, 1);
+                showToast(`Đã xóa "${product ? product.name : ''}" khỏi danh sách yêu thích`, 'info');
+            } else {
+                wishlist.push(productId);
+                showToast(`Đã thêm "${product ? product.name : ''}" vào danh sách yêu thích! ❤️`, 'success');
+            }
+
+            saveWishlist();
+            // Re-render components that show heart buttons
+            renderHomeProducts();
+            renderCatalogProducts(getFilteredProducts());
+            if (!document.getElementById('wishlist-page').classList.contains('hidden')) {
+                renderWishlist();
+            }
+        }
+
+        function clearWishlist() {
+            if (wishlist.length === 0) return;
+            wishlist = [];
+            saveWishlist();
+            renderWishlist();
+            renderHomeProducts();
+            renderCatalogProducts(getFilteredProducts());
+            showToast('Đã xóa tất cả sản phẩm yêu thích.', 'info');
+        }
+
+        function saveWishlist() {
+            localStorage.setItem('moto_wishlist', JSON.stringify(wishlist));
+            updateWishlistBadge();
+        }
+
+        function updateWishlistBadge() {
+            const badge = document.getElementById('wishlist-badge');
+            if (badge) badge.innerText = wishlist.length;
+        }
+
+        function renderWishlist() {
+            const grid = document.getElementById('wishlist-grid');
+            const emptyMsg = document.getElementById('wishlist-empty-msg');
+            const clearBtn = document.getElementById('clear-wishlist-btn');
+
+            const wishlistProducts = PRODUCTS.filter(p => wishlist.includes(p.id));
+
+            if (wishlistProducts.length === 0) {
+                grid.innerHTML = '';
+                emptyMsg.classList.remove('hidden');
+                clearBtn.classList.add('hidden');
+            } else {
+                emptyMsg.classList.add('hidden');
+                clearBtn.classList.remove('hidden');
+                grid.innerHTML = wishlistProducts.map(p => createProductCardHTML(p)).join('');
+            }
+        }
+
+        // ================= CART SYSTEM =================
+        function addToCart(productId, event) {
+            if (event) event.stopPropagation();
+            
+            const product = PRODUCTS.find(p => p.id === productId);
+            if (!product) return;
+
+            const existingIndex = cart.findIndex(item => item.id === productId);
+            if (existingIndex > -1) {
+                cart[existingIndex].quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            saveCart();
+            showToast(`Đã thêm "${product.name}" vào giỏ hàng!`, 'success');
+        }
+
+        function buyNow(productId) {
+            addToCart(productId);
+            showPage('cart-page');
+        }
+
+        function updateQuantity(productId, delta) {
+            const index = cart.findIndex(item => item.id === productId);
+            if (index > -1) {
+                cart[index].quantity += delta;
+                if (cart[index].quantity <= 0) {
+                    cart.splice(index, 1);
+                }
+                saveCart();
+                renderCart();
+            }
+        }
+
+        function setQuantity(productId, value) {
+            const qty = parseInt(value);
+            const index = cart.findIndex(item => item.id === productId);
+            if (index > -1) {
+                if (isNaN(qty) || qty <= 0) {
+                    cart.splice(index, 1);
+                } else {
+                    cart[index].quantity = qty;
+                }
+                saveCart();
+                renderCart();
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            saveCart();
+            renderCart();
+            showToast('Đã xóa sản phẩm khỏi giỏ hàng.', 'info');
+        }
+
+        function clearCart() {
+            if (cart.length === 0) return;
+            cart = [];
+            saveCart();
+            renderCart();
+            showToast('Đã làm trống giỏ hàng.', 'info');
+        }
+
+        function saveCart() {
+            localStorage.setItem('moto_cart', JSON.stringify(cart));
+            updateCartBadge();
+        }
+
+        function updateCartBadge() {
+            const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('cart-badge');
+            if (badge) badge.innerText = totalCount;
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items-container');
+            const emptyMsg = document.getElementById('cart-empty-msg');
+            
+            if (cart.length === 0) {
+                container.innerHTML = '';
+                emptyMsg.classList.remove('hidden');
+            } else {
+                emptyMsg.classList.add('hidden');
+                container.innerHTML = cart.map(item => `
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <img src="${item.image}" alt="${item.name}" class="w-24 h-20 object-cover rounded-xl cursor-pointer" onclick="openDetail(${item.id})">
+                        <div class="flex-grow text-center sm:text-left">
+                            <h4 class="font-bold text-base hover:text-red-600 cursor-pointer transition" onclick="openDetail(${item.id})">${item.name}</h4>
+                            <span class="text-xs text-gray-400">${item.brand} | ${item.category}</span>
+                            <div class="text-red-600 dark:text-red-400 font-extrabold text-sm mt-1">${formatVND(item.price)}</div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="updateQuantity(${item.id}, -1)" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 font-bold transition flex items-center justify-center">-</button>
+                            <input type="number" min="1" value="${item.quantity}" onchange="setQuantity(${item.id}, this.value)" class="w-12 h-8 text-center font-bold text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg outline-none focus:ring-1 focus:ring-red-500">
+                            <button onclick="updateQuantity(${item.id}, 1)" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 font-bold transition flex items-center justify-center">+</button>
+                        </div>
+                        <div class="text-right min-w-[120px]">
+                            <span class="text-[10px] text-gray-400 block font-semibold sm:hidden">Thành tiền</span>
+                            <div class="font-black text-sm text-gray-800 dark:text-gray-200">${formatVND(item.price * item.quantity)}</div>
+                        </div>
+                        <button onclick="removeFromCart(${item.id})" class="text-gray-400 hover:text-red-600 p-2 transition" title="Xóa">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+
+            calculateCartSummary();
+        }
+
+        function calculateCartSummary() {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const discount = subtotal * (discountPercent / 100);
+            const total = subtotal - discount;
+
+            document.getElementById('summary-subtotal').innerText = formatVND(subtotal);
+            document.getElementById('summary-discount').innerText = `-${formatVND(discount)}`;
+            document.getElementById('summary-total').innerText = formatVND(total);
+        }
+
+        function applyCoupon() {
+            const code = document.getElementById('coupon-input').value.trim().toUpperCase();
+            const msg = document.getElementById('coupon-msg');
+
+            if (code === 'MOTO10') {
+                discountPercent = 10;
+                msg.className = 'text-xs mt-1 font-semibold text-green-600';
+                msg.innerText = 'Áp dụng mã giảm 10% thành công!';
+                calculateCartSummary();
+            } else if (code === '') {
+                msg.innerText = '';
+            } else {
+                msg.className = 'text-xs mt-1 font-semibold text-red-500';
+                msg.innerText = 'Mã giảm giá không hợp lệ!';
+            }
+        }
+
+        // ================= CHECKOUT & VIETQR =================
+        function openCheckoutModal() {
+            if (cart.length === 0) {
+                showToast('Giỏ hàng trống!', 'warning');
+                return;
+            }
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const total = subtotal - (subtotal * (discountPercent / 100));
+            const memo = 'MOTO' + Math.floor(1000 + Math.random() * 9000);
+
+            // Generate VietQR URL
+            const bankId = '970415'; // VietinBank ID
+            const accountNo = '10288889999';
+            const qrUrl = `https://img.vietqr.io/image/${bankId}-${accountNo}-compact2.png?amount=${total}&addInfo=${memo}&accountName=SHOWROOM%20MOTO%20STORE`;
+
+            document.getElementById('vietqr-image').src = qrUrl;
+            document.getElementById('qr-amount').innerText = formatVND(total);
+            document.getElementById('qr-memo').innerText = memo;
+
+            document.getElementById('checkout-modal').classList.remove('hidden');
+            startQRTimer(15 * 60);
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+            if (qrTimerInterval) clearInterval(qrTimerInterval);
+        }
+
+        function startQRTimer(seconds) {
+            if (qrTimerInterval) clearInterval(qrTimerInterval);
+            let timer = seconds;
+            const display = document.getElementById('qr-timer');
+
+            qrTimerInterval = setInterval(() => {
+                const m = Math.floor(timer / 60);
+                const s = timer % 60;
+                display.innerText = `${m < 10 ? '0' + m : m}:${s < 10 ? '0' + s : s}`;
+
+                if (--timer < 0) {
+                    clearInterval(qrTimerInterval);
+                    closeCheckoutModal();
+                    showToast('Hết thời gian giữ đơn hàng QR. Vui lòng thử lại!', 'warning');
+                }
+            }, 1000);
+        }
+
+        function confirmPaymentSuccess() {
+            closeCheckoutModal();
+            clearCart();
+            showToast('🎉 Đặt hàng thành công! MOTO STORE sẽ liên hệ quý khách sớm nhất.', 'success');
+        }
+
+        // ================= RENDER PRODUCTS =================
+        function renderHomeProducts() {
+            const grid = document.getElementById('home-featured-grid');
+            if (grid) grid.innerHTML = PRODUCTS.slice(0, 4).map(p => createProductCardHTML(p)).join('');
+        }
+
+        function renderCatalogProducts(list) {
+            const grid = document.getElementById('catalog-grid');
+            if (!grid) return;
+            if (list.length === 0) {
+                grid.innerHTML = `<p class="col-span-full text-center py-10 text-gray-400 font-semibold">Không tìm thấy xe phù hợp.</p>`;
+                return;
+            }
+            grid.innerHTML = list.map(p => createProductCardHTML(p)).join('');
+        }
+
+        function createProductCardHTML(p) {
+            const isFav = wishlist.includes(p.id);
+            return `
+                <div onclick="openDetail(${p.id})" class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 flex flex-col cursor-pointer group relative">
+                    <!-- Wishlist Button -->
+                    <button onclick="toggleWishlist(${p.id}, event)" class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/80 dark:bg-gray-900/80 backdrop-blur flex items-center justify-center text-gray-400 hover:text-red-500 transition shadow-md" title="${isFav ? 'Bỏ yêu thích' : 'Yêu thích'}">
+                        <i class="fa-${isFav ? 'solid text-red-500' : 'regular'} fa-heart"></i>
+                    </button>
+
+                    <div class="relative overflow-hidden h-48">
+                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <span class="absolute top-3 left-3 bg-black/60 backdrop-blur text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">${p.category}</span>
+                    </div>
+                    <div class="p-5 flex flex-col flex-grow">
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">${p.brand}</span>
+                        <h3 class="font-bold text-lg mt-1 mb-2 group-hover:text-red-600 transition line-clamp-1">${p.name}</h3>
+                        <div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 mb-4">
+                            <span><i class="fa-solid fa-gauge"></i> ${p.odo}</span>
+                            <span><i class="fa-solid fa-bolt"></i> ${p.cc}</span>
+                        </div>
+                        <div class="mt-auto flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-700">
+                            <div>
+                                <span class="text-[10px] text-gray-400 block font-semibold">Giá Bán</span>
+                                <span class="text-red-600 dark:text-red-400 font-extrabold text-base">${formatVND(p.price)}</span>
+                            </div>
+                            <button onclick="addToCart(${p.id}, event)" class="p-2.5 bg-red-600 text-white rounded-xl hover:bg-red-700 transition shadow-md" title="Thêm vào giỏ">
+                                <i class="fa-solid fa-cart-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openDetail(productId) {
+            const p = PRODUCTS.find(item => item.id === productId);
+            if (!p) return;
+
+            const isFav = wishlist.includes(p.id);
+            const container = document.getElementById('detail-content');
+            container.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 md:p-8">
+                    <div>
+                        <img id="detail-main-img" src="${p.image}" alt="${p.name}" class="w-full h-80 md:h-96 object-cover rounded-2xl shadow-md">
+                        <div class="flex gap-3 mt-4">
+                            <img src="${p.image}" onclick="document.getElementById('detail-main-img').src='${p.image}'" class="w-20 h-16 object-cover rounded-lg cursor-pointer border-2 border-red-600">
+                            <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=800&q=80" onclick="document.getElementById('detail-main-img').src=this.src" class="w-20 h-16 object-cover rounded-lg cursor-pointer opacity-70 hover:opacity-100 transition">
+                        </div>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold text-red-600 uppercase tracking-widest">${p.brand} | ${p.category}</span>
+                            <button onclick="toggleWishlist(${p.id}, event)" class="flex items-center gap-1.5 text-xs font-bold ${isFav ? 'text-red-600' : 'text-gray-400 hover:text-red-600'} transition">
+                                <i class="fa-${isFav ? 'solid' : 'regular'} fa-heart text-base"></i>
+                                <span>${isFav ? 'Đã Yêu Thích' : 'Thêm Yêu Thích'}</span>
+                            </button>
+                        </div>
+                        <h1 class="text-3xl font-black mt-1 mb-3">${p.name}</h1>
+                        <div class="text-2xl font-extrabold text-red-600 mb-6">${formatVND(p.price)}</div>
+
+                        <!-- Specs Grid -->
+                        <div class="grid grid-cols-2 gap-3 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-xl mb-6 text-sm">
+                            <div><span class="text-gray-400 text-xs block">Dung tích xilanh</span> <strong>${p.cc}</strong></div>
+                            <div><span class="text-gray-400 text-xs block">Odo thực tế</span> <strong>${p.odo}</strong></div>
+                            <div><span class="text-gray-400 text-xs block">Năm sản xuất</span> <strong>${p.year}</strong></div>
+                            <div><span class="text-gray-400 text-xs block">Hộp số</span> <strong>${p.gearbox}</strong></div>
+                        </div>
+
+                        <div class="space-y-2 text-xs text-gray-500 dark:text-gray-400 mb-6">
+                            <p><i class="fa-solid fa-location-dot text-red-600 mr-1"></i> Showroom: 123 Nguyễn Văn Linh, Q.7, TP.HCM</p>
+                            <p><i class="fa-solid fa-shield-halved text-green-600 mr-1"></i> Cam kết 170 hạng mục kiểm định chất lượng chuẩn Châu Âu.</p>
+                        </div>
+
+                        <div class="mt-auto flex gap-4">
+                            <button onclick="addToCart(${p.id})" class="flex-1 py-3.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-bold rounded-xl transition">
+                                <i class="fa-solid fa-cart-plus mr-1"></i> Thêm Giỏ
+                            </button>
+                            <button onclick="buyNow(${p.id})" class="flex-1 py-3.5 bg-red-600 hover:bg-red-700 text-white font-extrabold rounded-xl shadow-lg transition">
+                                Đặt Bây Giờ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            showPage('detail-page');
+        }
+
+        // ================= FILTERS =================
+        function getFilteredProducts() {
+            const searchEl = document.getElementById('filter-search');
+            const categoryEl = document.getElementById('filter-category');
+            const brandEl = document.getElementById('filter-brand');
+            const sortEl = document.getElementById('filter-sort');
+
+            const search = searchEl ? searchEl.value.toLowerCase() : '';
+            const category = categoryEl ? categoryEl.value : '';
+            const brand = brandEl ? brandEl.value : '';
+            const sort = sortEl ? sortEl.value : 'default';
+
+            let result = PRODUCTS.filter(p => {
+                const matchSearch = p.name.toLowerCase().includes(search);
+                const matchCategory = category === '' || p.category === category;
+                const matchBrand = brand === '' || p.brand === brand;
+                return matchSearch && matchCategory && matchBrand;
+            });
+
+            if (sort === 'asc') {
+                result.sort((a, b) => a.price - b.price);
+            } else if (sort === 'desc') {
+                result.sort((a, b) => b.price - a.price);
+            }
+
+            return result;
+        }
+
+        function applyFilters() {
+            renderCatalogProducts(getFilteredProducts());
+        }
+
+        // ================= MINI GAME: HÁI TÁO TRÁNH BOM =================
+        let gameScore = 0;
+        let gameInterval = null;
+        let isGameRunning = false;
+        let currentBoardState = Array(9).fill(null); // Stores 'apple', 'bomb', or null
+
+        function initGame() {
+            resetGameScore();
+            renderGameGrid();
+            startGameLoop();
+        }
+
+        function renderGameGrid() {
+            const grid = document.getElementById('game-grid');
+            if (!grid) return;
+
+            grid.innerHTML = currentBoardState.map((type, idx) => {
+                let icon = '';
+                let bgClass = 'bg-gray-100 dark:bg-gray-700';
+
+                if (type === 'apple') {
+                    icon = '🍎';
+                    bgClass = 'bg-red-50 dark:bg-red-900/30 border-red-300';
+                } else if (type === 'bomb') {
+                    icon = '💣';
+                    bgClass = 'bg-gray-200 dark:bg-gray-600 border-gray-400';
+                } else if (type === 'hit-apple') {
+                    icon = '✨'; // Hiệu ứng đập trúng táo
+                    bgClass = 'bg-yellow-100 dark:bg-yellow-900/40 border-yellow-400';
+                } else if (type === 'hit-bomb') {
+                    icon = '💥'; // Hiệu ứng nổ bom
+                    bgClass = 'bg-orange-100 dark:bg-orange-900/40 border-orange-500';
+                }
+
+                return `
+                    <button onclick="clickGameCell(${idx})" class="h-24 ${bgClass} rounded-2xl text-4xl font-bold flex items-center justify-center transition-all duration-200 border-2 active:scale-95 shadow-sm hover:shadow-md">
+                        ${icon}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function spawnRandomItem() {
+            // Clear previous items that were not hit
+            currentBoardState = currentBoardState.map(item => (item === 'hit-apple' || item === 'hit-bomb') ? null : null);
+
+            // Random position (0-8)
+            const randomIdx = Math.floor(Math.random() * 9);
+            // Random item: 65% Apple (🍎), 35% Bomb (💣)
+            const isApple = Math.random() < 0.65;
+            currentBoardState[randomIdx] = isApple ? 'apple' : 'bomb';
+
+            renderGameGrid();
+        }
+
+        function startGameLoop() {
+            if (gameInterval) clearInterval(gameInterval);
+            isGameRunning = true;
+            spawnRandomItem();
+            gameInterval = setInterval(spawnRandomItem, 1000); // Mỗi 1 giây xuất hiện 1 vật phẩm
+
+            const statusText = document.getElementById('game-status-text');
+            const btn = document.getElementById('btn-start-game');
+            if (statusText) {
+                statusText.innerText = 'Đang chạy (1s/lần)';
+                statusText.className = 'text-sm font-bold text-green-600 dark:text-green-400';
+            }
+            if (btn) btn.innerHTML = '<i class="fa-solid fa-pause"></i> Tạm Dừng';
+        }
+
+        function toggleGameLoop() {
+            const btn = document.getElementById('btn-start-game');
+            const statusText = document.getElementById('game-status-text');
+
+            if (isGameRunning) {
+                clearInterval(gameInterval);
+                isGameRunning = false;
+                if (statusText) {
+                    statusText.innerText = 'Đã tạm dừng';
+                    statusText.className = 'text-sm font-bold text-gray-400';
+                }
+                if (btn) btn.innerHTML = '<i class="fa-solid fa-play"></i> Tiếp Tục';
+            } else {
+                startGameLoop();
+            }
+        }
+
+        function clickGameCell(index) {
+            const item = currentBoardState[index];
+            if (!item || item === 'hit-apple' || item === 'hit-bomb') return;
+
+            if (item === 'apple') {
+                gameScore += 10;
+                currentBoardState[index] = 'hit-apple'; // Đổi sang icon Sparkles ✨
+                showToast('+10 điểm! 🍎', 'success');
+            } else if (item === 'bomb') {
+                gameScore -= 20;
+                currentBoardState[index] = 'hit-bomb'; // Đổi sang icon Nổ 💥
+                showToast('-20 điểm! 💥', 'warning');
+            }
+
+            // Cập nhật hiển thị điểm số tức thì
+            document.getElementById('game-score').innerText = gameScore;
+            renderGameGrid();
+
+            // Kiểm tra mốc 100 điểm để tặng Voucher
+            if (gameScore >= 100 && !window.hasWonVoucher) {
+                window.hasWonVoucher = true;
+                showToast('🎉 Xuất sắc! Bạn đã đạt trên 100 điểm. Sử dụng mã MOTO10 ở Giỏ hàng để giảm 10%!', 'success');
+            }
+        }
+
+        function resetGameScore() {
+            gameScore = 0;
+            window.hasWonVoucher = false;
+            currentBoardState = Array(9).fill(null);
+            const scoreEl = document.getElementById('game-score');
+            if (scoreEl) scoreEl.innerText = '0';
+            renderGameGrid();
+        }
+
+        // ================= AUTH SYSTEM =================
+        function switchAuthTab(tab) {
+            if (tab === 'login') {
+                document.getElementById('form-login').classList.remove('hidden');
+                document.getElementById('form-register').classList.add('hidden');
+                document.getElementById('tab-login').className = 'flex-1 pb-3 font-bold border-b-2 border-red-600 text-red-600';
+                document.getElementById('tab-register').className = 'flex-1 pb-3 font-bold border-b-2 border-transparent text-gray-400';
+            } else {
+                document.getElementById('form-login').classList.add('hidden');
+                document.getElementById('form-register').classList.remove('hidden');
+                document.getElementById('tab-register').className = 'flex-1 pb-3 font-bold border-b-2 border-red-600 text-red-600';
+                document.getElementById('tab-login').className = 'flex-1 pb-3 font-bold border-b-2 border-transparent text-gray-400';
+            }
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+
+            currentUser = { name, email };
+            localStorage.setItem('moto_user', JSON.stringify(currentUser));
+            renderAuthSection();
+            showPage('home-page');
+            showToast(`Chào mừng ${name} đến với MOTO STORE!`, 'success');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const userVal = document.getElementById('login-user').value;
+
+            currentUser = { name: userVal.split('@')[0], email: userVal };
+            localStorage.setItem('moto_user', JSON.stringify(currentUser));
+            renderAuthSection();
+            showPage('home-page');
+            showToast('Đăng nhập thành công!', 'success');
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('moto_user');
+            renderAuthSection();
+            showToast('Đã đăng xuất tài khoản.', 'info');
+        }
+
+        function renderAuthSection() {
+            const container = document.getElementById('auth-section');
+            if (!container) return;
+            if (currentUser) {
+                container.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-bold text-gray-700 dark:text-gray-200 hidden sm:inline">Hi, ${currentUser.name}</span>
+                        <button onclick="logout()" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-red-600 hover:bg-gray-200 dark:hover:bg-gray-700 transition" title="Đăng Xuất">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <button onclick="showPage('auth-page')" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-lg transition shadow">
+                        Đăng Nhập
+                    </button>
+                `;
+            }
+        }
+
+        // ================= UTILITIES & HELPERS =================
+        function formatVND(amount) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+        }
+
+        function toggleDarkMode() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            const icon = document.getElementById('theme-icon');
+            if (isDark) {
+                icon.className = 'fa-solid fa-sun text-yellow-400';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.className = 'fa-solid fa-moon text-gray-600';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            const bgClass = type === 'success' ? 'bg-green-600' : type === 'warning' ? 'bg-amber-600' : 'bg-blue-600';
+
+            toast.className = `${bgClass} text-white text-xs font-bold px-4 py-3 rounded-xl shadow-lg flex items-center justify-between gap-3 pointer-events-auto transform translate-y-2 opacity-0 transition-all duration-300 min-w-[240px]`;
+            toast.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()" class="text-white hover:text-gray-200">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            `;
+
+            container.appendChild(toast);
+
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function startCountdown() {
+            let seconds = 2 * 24 * 3600 + 14 * 3600 + 35 * 60 + 50;
+            setInterval(() => {
+                if (seconds <= 0) return;
+                seconds--;
+                const d = Math.floor(seconds / (3600 * 24));
+                const h = Math.floor((seconds % (3600 * 24)) / 3600);
+                const m = Math.floor((seconds % 3600) / 60);
+                const s = seconds % 60;
+
+                const cdDays = document.getElementById('cd-days');
+                const cdHours = document.getElementById('cd-hours');
+                const cdMins = document.getElementById('cd-mins');
+                const cdSecs = document.getElementById('cd-secs');
+
+                if (cdDays) cdDays.innerText = d < 10 ? '0' + d : d;
+                if (cdHours) cdHours.innerText = h < 10 ? '0' + h : h;
+                if (cdMins) cdMins.innerText = m < 10 ? '0' + m : m;
+                if (cdSecs) cdSecs.innerText = s < 10 ? '0' + s : s;
+            }, 1000);
+        }
+    </script>
+    <script src="assignment.js"></script>
+</body>
+</html>
