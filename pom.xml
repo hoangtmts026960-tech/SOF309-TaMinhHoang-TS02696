@@ -32,6 +32,23 @@
         </dependency>
 
         <!-- ============================================== -->
+        <!-- JUNIT 4 FRAMEWORK (CHO LAB 2 & TEST SUITE)     -->
+        <!-- ============================================== -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+        </dependency>
+
+        <!-- JUnit Vintage Engine để Surefire chạy cả JUnit 4 và 5 -->
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- ============================================== -->
         <!-- [Y4] SELENIUM WEBDRIVER CHO UI AUTOMATION     -->
         <!-- ============================================== -->
         <dependency>
