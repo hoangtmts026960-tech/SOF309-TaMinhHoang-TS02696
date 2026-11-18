@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
 /**
  * =========================================================================
  * [Y3] CONTROLLER QUẢN LÝ XÁC THỰC VÀ NGƯỜI DÙNG (MOTO STORE)
+ * Môn học: SOF309 - Kiểm thử nâng cao cùng AI
+ * Sinh viên: Tạ Minh Hoàng (MSSV: TS02696 - Lớp: SD21307)
  * =========================================================================
  */
 public class AuthController {
@@ -32,6 +34,31 @@ public class AuthController {
     }
 
     /**
+     * BƯỚC 2.2: Hàm kiểm tra validation form đăng ký (khớp chính xác đề bài cẩm nang Tuần 2)
+     */
+    public boolean validateRegister(String username, String password) {
+        if (username == null || username.trim().isEmpty()) {
+            return false;
+        }
+        if (username.length() < 5 || username.length() > 20) {
+            return false;
+        }
+        if (password == null || password.length() < 8) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * BƯỚC 2.3: Giả lập đăng ký tài khoản đã tồn tại ném DuplicateUserException (khớp slide)
+     */
+    public void registerExistingAccount(String username) {
+        if (isEmailExists(username)) {
+            throw new DuplicateUserException("Tài khoản đã tồn tại trong hệ thống: " + username);
+        }
+    }
+
+    /**
      * Xác thực thông tin đăng nhập
      */
     public boolean authenticate(String username, String password) {
@@ -46,22 +73,6 @@ public class AuthController {
             }
         }
         return false;
-    }
-
-    /**
-     * Kiểm tra validation đăng ký đơn giản theo mẫu hướng dẫn của Thầy
-     */
-    public boolean validateRegister(String username, String password) {
-        if (username == null || username.trim().isEmpty()) {
-            return false;
-        }
-        if (username.length() < 5 || username.length() > 20) {
-            return false;
-        }
-        if (password == null || password.length() < 8) {
-            return false;
-        }
-        return true;
     }
 
     /**
@@ -99,15 +110,6 @@ public class AuthController {
         // Đăng ký thành công -> lưu vào DB
         userDatabase.add(new User(name.trim(), email.trim(), phone.trim(), password));
         return true;
-    }
-
-    /**
-     * Hàm giả lập kiểm tra tài khoản đã tồn tại ném DuplicateUserException
-     */
-    public void registerExistingAccount(String email) {
-        if (isEmailExists(email)) {
-            throw new DuplicateUserException("Tài khoản đã tồn tại trong hệ thống: " + email);
-        }
     }
 
     public boolean isEmailExists(String identifier) {

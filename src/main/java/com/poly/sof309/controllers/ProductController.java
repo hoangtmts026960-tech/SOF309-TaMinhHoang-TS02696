@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 /**
  * =========================================================================
  * [Y3] CONTROLLER QUẢN LÝ DANH MỤC & LỌC SẢN PHẨM MÔ TÔ
+ * Môn học: SOF309 - Kiểm thử nâng cao cùng AI
+ * Sinh viên: Tạ Minh Hoàng (MSSV: TS02696 - Lớp: SD21307)
  * =========================================================================
  */
 public class ProductController {

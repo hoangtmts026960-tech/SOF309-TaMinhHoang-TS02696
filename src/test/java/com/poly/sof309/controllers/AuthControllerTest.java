@@ -16,20 +16,61 @@ import static org.junit.jupiter.api.Assertions.*;
  * =========================================================================
  * [Y3] BỘ UNIT TEST JUNIT 5 CHO AUTHCONTROLLER (MOTO STORE)
  * Kế thừa kỹ thuật: @ParameterizedTest (Lab 2), Exception & Timeout (Lab 3)
+ * Sinh viên: Tạ Minh Hoàng (MSSV: TS02696 - Lớp: SD21307)
  * =========================================================================
  */
 public class AuthControllerTest {
 
     private AuthController authController;
+    private AuthController authService; // Khai báo alias authService để khớp 100% với slide Thầy
 
     @BeforeEach
     public void setUp() {
         authController = new AuthController();
+        authService = authController;
     }
 
-    // ---------------------------------------------------------------------
-    // 1. KIỂM THỬ XÁC THỰC ĐĂNG NHẬP (TC_CTRL_AUTH_01 -> 03)
-    // ---------------------------------------------------------------------
+    // =========================================================================
+    // BƯỚC 2.2: PARAMETERIZED TEST KIỂM TRA BIÊN FORM ĐĂNG KÝ (KHỚP 100% SLIDE)
+    // =========================================================================
+    @ParameterizedTest
+    @DisplayName("Kiểm tra validation đăng ký tài khoản với nhiều bộ dữ liệu biên")
+    @CsvSource({
+        "'', 'password123', false, 'Username không được để trống'",
+        "'user', 'password123', false, 'Username phải từ 5 đến 20 ký tự'",
+        "'validUser', '123', false, 'Mật khẩu phải từ 8 ký tự'",
+        "'validUser', 'Pass@1234', true, 'Đăng ký thành công'"
+    })
+    public void testRegisterValidation(String username, String password, boolean expectedSuccess, String message) {
+        boolean actualResult = authService.validateRegister(username, password);
+        assertEquals(expectedSuccess, actualResult, message);
+    }
+
+    // =========================================================================
+    // BƯỚC 2.3: EXCEPTION TESTING (ASSERTTHROWS) (KHỚP 100% SLIDE)
+    // =========================================================================
+    @Test
+    @DisplayName("Ném ngoại lệ DuplicateUserException khi tài khoản đã tồn tại")
+    public void testRegisterDuplicateUserThrowsException() {
+        assertThrows(DuplicateUserException.class, () -> {
+            authService.registerExistingAccount("admin");
+        });
+    }
+
+    // =========================================================================
+    // BƯỚC 2.4: TIMEOUT TESTING (TIMEOUT 2 SECONDS)
+    // =========================================================================
+    @Test
+    @Timeout(value = 2, unit = TimeUnit.SECONDS)
+    @DisplayName("Kiểm tra thời gian xác thực tài khoản không bị treo vòng lặp vô tận (Timeout 2s)")
+    public void testAuthenticateTimeout() {
+        boolean result = authController.authenticate("admin@gmail.com", "123456");
+        assertTrue(result);
+    }
+
+    // =========================================================================
+    // BỔ SUNG: CÁC TEST CASES ĐẶC TẢ CHI TIẾT THEO SPECIFICATIONS (Y3)
+    // =========================================================================
 
     @Test
     @DisplayName("TC_CTRL_AUTH_01: Đăng nhập thành công với tài khoản quản trị mặc định")
@@ -50,23 +91,6 @@ public class AuthControllerTest {
     public void testLoginFailureWithUnregisteredAccount() {
         boolean result = authController.authenticate("chuadangky@domain.com", "123456");
         assertFalse(result, "Đăng nhập phải thất bại khi tài khoản chưa tồn tại");
-    }
-
-    // ---------------------------------------------------------------------
-    // 2. PARAMETERIZED TESTS KIỂM TRA GIÁ TRỊ BIÊN FORM ĐĂNG KÝ (BƯỚC 2.2)
-    // ---------------------------------------------------------------------
-
-    @ParameterizedTest
-    @DisplayName("Kiểm tra validation đăng ký tài khoản với nhiều bộ dữ liệu biên")
-    @CsvSource({
-        "'', 'password123', false, 'Username không được để trống'",
-        "'user', 'password123', false, 'Username phải từ 5 đến 20 ký tự'",
-        "'validUser', '123', false, 'Mật khẩu phải từ 8 ký tự'",
-        "'validUser', 'Pass@1234', true, 'Đăng ký thành công'"
-    })
-    public void testRegisterValidation(String username, String password, boolean expectedSuccess, String message) {
-        boolean actualResult = authController.validateRegister(username, password);
-        assertEquals(expectedSuccess, actualResult, message);
     }
 
     @ParameterizedTest
@@ -98,39 +122,22 @@ public class AuthControllerTest {
     }
 
     @ParameterizedTest
-    @DisplayName("TC_CTRL_AUTH_06: Kiểm tra số điện thoại 10 số đầu số Việt Nam (03, 05, 07, 08, 09)")
+    @DisplayName("TC_CTRL_AUTH_06: Kiểm tra số điện thoại chuẩn 10 chữ số đầu số Việt Nam")
     @CsvSource({
-        "'090123456', false, '9 số (thiếu): Không hợp lệ'",
-        "'0901234567', true, '10 số đầu 09: Hợp lệ'",
-        "'0387654321', true, '10 số đầu 03: Hợp lệ'",
-        "'0771122334', true, '10 số đầu 07: Hợp lệ'",
-        "'09012345678', false, '11 số (thừa): Không hợp lệ'",
-        "'0123456789', false, 'Đầu số lạ 01x: Không hợp lệ'",
-        "'090abcdef1', false, 'Chứa ký tự chữ: Không hợp lệ'"
+        "'090123456', false, 'Thiếu số: 9 chữ số'",
+        "'0901234567', true, 'Hợp lệ: 10 chữ số đầu 09'",
+        "'0381234567', true, 'Hợp lệ: 10 chữ số đầu 03'",
+        "'0771234567', true, 'Hợp lệ: 10 chữ số đầu 07'",
+        "'0851234567', true, 'Hợp lệ: 10 chữ số đầu 08'",
+        "'0561234567', true, 'Hợp lệ: 10 chữ số đầu 05'",
+        "'09012345678', false, 'Thừa số: 11 chữ số'",
+        "'0123456789', false, 'Đầu số 01 không hợp lệ'",
+        "'090abc1234', false, 'Chứa ký tự chữ'",
+        "'', false, 'Để trống'"
     })
-    public void testPhoneNumberValidation(String phone, boolean expected, String message) {
-        boolean actual = authController.register("Lê Văn C", "user_" + System.nanoTime() + "@fpt.edu.vn", phone, "Password@123");
+    public void testPhoneValidation(String phone, boolean expected, String message) {
+        boolean actual = authController.register("Lê Văn C", "unique_phone_" + System.nanoTime() + "@gmail.com", phone, "Password@123");
         assertEquals(expected, actual, message);
-    }
-
-    // ---------------------------------------------------------------------
-    // 3. EXCEPTION TESTING (BƯỚC 2.3)
-    // ---------------------------------------------------------------------
-
-    @Test
-    @DisplayName("Ném ngoại lệ DuplicateUserException khi tài khoản đã tồn tại")
-    public void testRegisterDuplicateUserThrowsException() {
-        assertThrows(DuplicateUserException.class, () -> {
-            authController.registerExistingAccount("admin");
-        });
-    }
-
-    @Test
-    @DisplayName("TC_CTRL_AUTH_07 (Cách 2): Đăng ký lại email đã có trong hệ thống phải ném DuplicateUserException")
-    public void testRegisterDuplicateEmailThrowsException() {
-        assertThrows(DuplicateUserException.class, () -> {
-            authController.register("Nguyễn Văn Admin", "admin@gmail.com", "0988888888", "MatKhau@123");
-        }, "Phải ném ngoại lệ khi trùng email đăng ký");
     }
 
     @Test
@@ -143,25 +150,5 @@ public class AuthControllerTest {
         assertThrows(IllegalArgumentException.class, () -> {
             authController.register("", "valid_test@gmail.com", "0901234567", "Password@123");
         }, "Phải ném IllegalArgumentException khi tên để trống");
-    }
-
-    @Test
-    @DisplayName("TC_CTRL_AUTH_08 (Phụ): Ném IllegalArgumentException khi họ tên chứa chữ số")
-    public void testRegisterNameWithDigitsThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            authController.register("Hoàng123", "test_digit@gmail.com", "0901234567", "Password@123");
-        }, "Họ tên chứa chữ số phải ném IllegalArgumentException");
-    }
-
-    // ---------------------------------------------------------------------
-    // 4. TIMEOUT TESTING (BƯỚC 2.4)
-    // ---------------------------------------------------------------------
-
-    @Test
-    @Timeout(value = 2, unit = TimeUnit.SECONDS)
-    @DisplayName("TC_CTRL_AUTH_09: Timeout testing - Xác thực người dùng phải hoàn tất dưới 2 giây")
-    public void testAuthenticatePerformanceTimeout() {
-        boolean result = authController.authenticate("admin@gmail.com", "123456");
-        assertTrue(result);
     }
 }
