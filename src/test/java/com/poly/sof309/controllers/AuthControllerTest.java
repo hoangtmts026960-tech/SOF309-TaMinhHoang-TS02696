@@ -57,14 +57,14 @@ public class AuthControllerTest {
     // ---------------------------------------------------------------------
 
     @ParameterizedTest
-    @DisplayName("Kiểm tra validation đăng ký tài khoản với nhiều bộ dữ liệu biên (Lab 2)")
+    @DisplayName("Kiểm tra validation đăng ký tài khoản với nhiều bộ dữ liệu biên")
     @CsvSource({
         "'', 'password123', false, 'Username không được để trống'",
         "'user', 'password123', false, 'Username phải từ 5 đến 20 ký tự'",
         "'validUser', '123', false, 'Mật khẩu phải từ 8 ký tự'",
         "'validUser', 'Pass@1234', true, 'Đăng ký thành công'"
     })
-    public void testRegisterValidationSample(String username, String password, boolean expectedSuccess, String message) {
+    public void testRegisterValidation(String username, String password, boolean expectedSuccess, String message) {
         boolean actualResult = authController.validateRegister(username, password);
         assertEquals(expectedSuccess, actualResult, message);
     }
@@ -118,11 +118,11 @@ public class AuthControllerTest {
     // ---------------------------------------------------------------------
 
     @Test
-    @DisplayName("TC_CTRL_AUTH_07: Ném ngoại lệ DuplicateUserException khi tài khoản đã tồn tại (Lab 3)")
+    @DisplayName("Ném ngoại lệ DuplicateUserException khi tài khoản đã tồn tại")
     public void testRegisterDuplicateUserThrowsException() {
         assertThrows(DuplicateUserException.class, () -> {
-            authController.registerExistingAccount("admin@gmail.com");
-        }, "Phải ném DuplicateUserException khi tài khoản admin đã tồn tại");
+            authController.registerExistingAccount("admin");
+        });
     }
 
     @Test

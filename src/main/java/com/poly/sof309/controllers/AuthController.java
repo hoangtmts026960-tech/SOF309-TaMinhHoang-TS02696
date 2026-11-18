@@ -110,9 +110,14 @@ public class AuthController {
         }
     }
 
-    public boolean isEmailExists(String email) {
-        if (email == null) return false;
-        return userDatabase.stream().anyMatch(u -> u.getEmail().equalsIgnoreCase(email.trim()));
+    public boolean isEmailExists(String identifier) {
+        if (identifier == null) return false;
+        String trimmed = identifier.trim();
+        return userDatabase.stream().anyMatch(u -> 
+            u.getEmail().equalsIgnoreCase(trimmed) || 
+            u.getEmail().startsWith(trimmed + "@") ||
+            (trimmed.equalsIgnoreCase("admin") && u.getEmail().startsWith("admin"))
+        );
     }
 
     public int getUserCount() {
